@@ -47,9 +47,17 @@ docker exec -it mysql bash # Mysql Container, user=root, password=passwd
 
 In Api container, `/files` is a linked volume if one wants to use files in container.
 
-## Questions
-Develop a way to inform the user about the status of the data ingestion without using a
-polling solution.
+## Troubleshooting
+
+On MacOS, sometimes the internal network do not work. To fix it:
+- System Preferences -> Sharing -> Check the "Remote Login" box.
+- The `hadoop` container works and can be reached in:
+
+```bash
+http://localhost:9870
+```
+
+but like I said before, lost too much time trying to fix the remote connection from one container to another and even though it worked, was intermitent so I choose to not keep with using it.
 
 ## Specifics
 - __Scalability__:
