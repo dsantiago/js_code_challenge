@@ -23,7 +23,8 @@ docker exec -it mysql bash -c "mysql -u root -ppasswd < initialize.sql"
 
 ## Running application
 
-The table trips will be empty, what we can do first is import data, this will load `trips.csv` via Spark and insert into Mysql. Column `datetime` was changed to `datetm` to avoid any reserved term. There's an internal variable `JOBS` that appends where job is `running` and when it's `done`. Could be done with another table in Mysql also. Files that are loaded from `/inputs` are moved to `/ingested_files`
+The table trips will be empty, what we can do first is import data, this will load `trips.csv` via Spark and insert into Mysql. Column `datetime` was changed to `datetm` to avoid any reserved term. There's an internal variable `JOBS` that appends a new `id` with status between `processing` and `done`. This solution to that trys to inform when an ingestion is still ongoing could be done also using another table in Mysql. 
+Files that are loaded from `/inputs` and appended in target table are moved to `/ingested_files`.
 
 ```bash
 http://localhost:8080/ingestion
