@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  # hadoop:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile-Hadoop
+
+  #   container_name: hadoop
+
+  #   expose:
+  #     - "8020"
+  #     - "9000"
+  #     - "9870"
+  #     - "50010"
+
+  #   ports:
+  #     # YARN Ports
+  #     - "8042:8042" # YARN interface
+  #     - "8088:8088" # YARN interface
+  #     # HDFS Ports
+  #     - "8020:8020"
+  #     - "9000:9000"
+  #     - "9866:9866"
+  #     - "9870:9870"
+  #     - "50010:50010"
+  #     - "50020:50020"
+  #     - "50070:50070"
+
+  #   volumes:
+  #     - hdfs-data:/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile-FastAPI
+    
+    container_name: api
+
+    volumes:
+      - ./files:/files
+
+    ports:
+     - "8080:8080"
+
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile-Mysql
+
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+
+
+volumes:
+  mysql:
+  # hdfs-data:

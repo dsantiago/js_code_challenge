@@ -1,0 +1,35 @@
+FROM python:3.9
+
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ENV SPARK_HOME=/usr/local/spark
+ENV PATH=${PATH}:${SPARK_HOME}/bin
+
+RUN apt-get update -y \
+    && apt-get upgrade -y \
+    && apt-get install software-properties-common -y \
+    && apt-add-repository 'deb http://security.debian.org/debian-security stretch/updates main' \
+    && apt-get update -y \
+    && apt-get upgrade -y \
+    && apt-get -y install openjdk-8-jdk
+
+RUN wget -q https://archive.apache.org/dist/spark/spark-3.3.0/spark-3.3.0-bin-hadoop3.tgz -O /tmp/spark-3.3.0-bin-hadoop3.tgz \
+    && tar -xzf /tmp/spark-3.3.0-bin-hadoop3.tgz -C /usr/local/ \
+    && ln -s /usr/local/spark-3.3.0-bin-hadoop3 /usr/local/spark
+
+RUN wget https://downloads.mysql.com/archives/get/p/3/file/mysql-connector-java-5.1.43.tar.gz
+
+RUN tar -zxf mysql-connector-* \
+    && cp mysql-connector-*/mysql-connector* $SPARK_HOME/jars \
+    && rm -rf mysql-connector-*
+
+WORKDIR /code
+
+COPY ./app/requirements.txt /code/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+COPY ./app /code/app
+
+COPY ./files/trips.csv /inputs/trips.csv
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
