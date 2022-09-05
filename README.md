@@ -16,7 +16,7 @@ There's just 2 steps:
 docker-compose up -d
 ```
 
-- Once the API and Mysql containers are up, initialize `trips` table. (the file is already in container).
+- Once the API and Mysql containers are up, wait a few seconds and initialize `trips` table via the following command. (the file is already in container).
 ```bash
 docker exec -it mysql bash -c "mysql -u root -ppasswd < initialize.sql"
 ```
